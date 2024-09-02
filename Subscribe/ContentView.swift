@@ -7,6 +7,7 @@ struct AppColor {
     static let background = Color(red: 0.95, green: 0.95, blue: 0.97)
     static let cardBackground = Color.white
     static let text = Color(red: 0.2, green: 0.2, blue: 0.2)
+    static let deleteRed = Color.red
 }
 
 // 구독 모델
@@ -44,6 +45,7 @@ struct CustomTextField: View {
 struct CustomButton: View {
     var title: String
     var action: () -> Void
+    var color: Color = AppColor.primary
     
     var body: some View {
         Button(action: action) {
@@ -51,7 +53,7 @@ struct CustomButton: View {
                 .fontWeight(.bold)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(LinearGradient(gradient: Gradient(colors: [AppColor.primary, AppColor.secondary]), startPoint: .leading, endPoint: .trailing))
+                .background(color)
                 .foregroundColor(.white)
                 .cornerRadius(15)
                 .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
@@ -78,32 +80,53 @@ struct AddSubscriptionView: View {
             AppColor.background.edgesIgnoringSafeArea(.all)
             
             ScrollView {
-                VStack(spacing: 20) {
-                    CustomTextField(icon: "pencil", placeholder: "구독 이름", text: $name)
-                    CustomTextField(icon: "dollarsign.circle", placeholder: "가격", text: $price)
-                        .keyboardType(.decimalPad)
-                    
-                    Picker("결제 주기", selection: $cycle) {
-                        ForEach(cycles, id: \.self) { Text($0) }
+                VStack(spacing: 25) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("구독 정보")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(AppColor.text)
+                        CustomTextField(icon: "pencil", placeholder: "구독 이름", text: $name)
+                        CustomTextField(icon: "dollarsign.circle", placeholder: "가격", text: $price)
+                            .keyboardType(.decimalPad)
                     }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding(.vertical)
                     
-                    DatePicker("결제 날짜", selection: $date, displayedComponents: .date)
-                        .padding(.vertical)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("결제 정보")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(AppColor.text)
+                        
+                        Picker("결제 주기", selection: $cycle) {
+                            ForEach(cycles, id: \.self) { Text($0) }
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding(.vertical, 5)
+                        
+                        DatePicker("결제 날짜", selection: $date, displayedComponents: .date)
+                            .padding(.vertical, 5)
+                    }
                     
-                    CustomTextField(icon: "link", placeholder: "구독 링크", text: $link)
-                    CustomTextField(icon: "tag", placeholder: "카테고리", text: $category)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("추가 정보(선택)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(AppColor.text)
+                        CustomTextField(icon: "link", placeholder: "구독 링크", text: $link)
+                        CustomTextField(icon: "tag", placeholder: "카테고리", text: $category)
+                    }
                     
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("카드 색상")
-                            .font(.headline)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(AppColor.text)
                         ColorPicker("", selection: $color)
                             .frame(height: 50)
                     }
-                    .padding(.vertical)
                     
                     CustomButton(title: "구독 추가", action: addSubscription)
+                        .padding(.top, 20)
                 }
                 .padding()
             }
@@ -122,34 +145,21 @@ struct AddSubscriptionView: View {
 // 2. 구독 목록 화면
 struct SubscriptionListView: View {
     @Binding var subscriptions: [Subscription]
-    @State private var showingAddSubscription = false
 
     var body: some View {
         ZStack {
             AppColor.background.edgesIgnoringSafeArea(.all)
             
             ScrollView {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                LazyVStack(spacing: 20) {
                     ForEach(subscriptions) { subscription in
-                        NavigationLink(destination: EditSubscriptionView(subscription: binding(for: subscription))) {
+                        NavigationLink(destination: EditSubscriptionView(subscription: binding(for: subscription), subscriptions: $subscriptions)) {
                             SubscriptionCard(subscription: subscription)
                         }
                     }
+                    .onDelete(perform: deleteSubscription)
                 }
                 .padding()
-            }
-        }
-        .navigationBarTitle("내 구독", displayMode: .large)
-        .navigationBarItems(trailing: Button(action: {
-            showingAddSubscription = true
-        }) {
-            Image(systemName: "plus.circle.fill")
-                .font(.title2)
-                .foregroundColor(AppColor.primary)
-        })
-        .sheet(isPresented: $showingAddSubscription) {
-            NavigationView {
-                AddSubscriptionView(subscriptions: $subscriptions)
             }
         }
     }
@@ -160,6 +170,10 @@ struct SubscriptionListView: View {
         }
         return $subscriptions[index]
     }
+
+    private func deleteSubscription(at offsets: IndexSet) {
+        subscriptions.remove(atOffsets: offsets)
+    }
 }
 
 // 구독 카드 뷰
@@ -167,31 +181,50 @@ struct SubscriptionCard: View {
     let subscription: Subscription
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(subscription.name)
-                .font(.headline)
-                .foregroundColor(.white)
-            Text("\(subscription.price, specifier: "%.f")원")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-            Text(subscription.cycle)
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
+        HStack(spacing: 15) {
+            Circle()
+                .fill(subscription.color)
+                .frame(width: 50, height: 50)
+                .overlay(
+                    Text(subscription.name.prefix(1).uppercased())
+                        .font(.title2.bold())
+                        .foregroundColor(.white)
+                )
+            
+            VStack(alignment: .leading, spacing: 5) {
+                Text(subscription.name)
+                    .font(.headline)
+                    .foregroundColor(AppColor.text)
+                Text(subscription.category)
+                    .font(.subheadline)
+                    .foregroundColor(AppColor.text.opacity(0.7))
+            }
+            
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 5) {
+                Text("\(subscription.price, specifier: "%.f")원")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(AppColor.primary)
+                Text(subscription.cycle)
+                    .font(.caption)
+                    .foregroundColor(AppColor.text.opacity(0.7))
+            }
         }
-        .frame(height: 150)
-        .frame(maxWidth: .infinity)
         .padding()
-        .background(subscription.color)
-        .cornerRadius(20)
-        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+        .background(AppColor.cardBackground)
+        .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
     }
 }
 
 // 3. 구독 수정 화면
 struct EditSubscriptionView: View {
     @Binding var subscription: Subscription
+    @Binding var subscriptions: [Subscription]
     @Environment(\.presentationMode) var presentationMode
+    @State private var showingDeleteAlert = false
 
     let cycles = ["월별", "분기별", "연별"]
 
@@ -231,11 +264,58 @@ struct EditSubscriptionView: View {
                     CustomButton(title: "변경 사항 저장") {
                         self.presentationMode.wrappedValue.dismiss()
                     }
+                    
+                    CustomButton(title: "구독 삭제", action: {
+                        showingDeleteAlert = true
+                    }, color: AppColor.deleteRed)
                 }
                 .padding()
             }
         }
         .navigationBarTitle("구독 수정", displayMode: .inline)
+        .alert(isPresented: $showingDeleteAlert) {
+            Alert(
+                title: Text("구독 삭제"),
+                message: Text("정말로 이 구독을 삭제하시겠습니까?"),
+                primaryButton: .destructive(Text("삭제")) {
+                    deleteSubscription()
+                },
+                secondaryButton: .cancel()
+            )
+        }
+    }
+
+    private func deleteSubscription() {
+        if let index = subscriptions.firstIndex(where: { $0.id == subscription.id }) {
+            subscriptions.remove(at: index)
+            presentationMode.wrappedValue.dismiss()
+        }
+    }
+}
+
+// 검색 바
+struct SearchBar: View {
+    @Binding var text: String
+
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            TextField("구독 검색", text: $text)
+                .foregroundColor(AppColor.text)
+            if !text.isEmpty {
+                Button(action: {
+                    self.text = ""
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+        .padding(10)
+        .background(AppColor.cardBackground)
+        .cornerRadius(10)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
     }
 }
 
@@ -286,14 +366,12 @@ struct SubscriptionStatsView: View {
                 .padding()
             }
         }
-        .navigationBarTitle("구독 통계", displayMode: .large)
     }
 }
 
 struct StatCard: View {
     var title: String
     var value: String
-    
     var body: some View {
         VStack(spacing: 10) {
             Text(title)
@@ -313,28 +391,101 @@ struct StatCard: View {
     }
 }
 
-// 메인 컨텐트 뷰
+struct CustomTabItem: View {
+    let imageName: String
+    let title: String
+    let isSelected: Bool
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Image(systemName: imageName)
+                .font(.system(size: 24))
+                .foregroundColor(isSelected ? AppColor.primary : .gray)
+            Text(title)
+                .font(.caption2)
+                .fontWeight(isSelected ? .bold : .regular)
+                .foregroundColor(isSelected ? AppColor.primary : .gray)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+struct CustomTabBar: View {
+    @Binding var selectedTab: Int
+    let addAction: () -> Void
+    
+    var body: some View {
+        ZStack {
+            // 메인 탭바 배경
+            RoundedRectangle(cornerRadius: 30)
+                .fill(AppColor.cardBackground)
+                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
+                .frame(height: 70)
+            
+            HStack(spacing: 0) {
+                CustomTabItem(imageName: "list.bullet.rectangle", title: "구독", isSelected: selectedTab == 0)
+                    .onTapGesture { selectedTab = 0 }
+                
+                Spacer()
+                
+                // 중앙 플러스 버튼
+                Button(action: addAction) {
+                    ZStack {
+                        Circle()
+                            .fill(AppColor.primary)
+                            .shadow(color: AppColor.primary.opacity(0.4), radius: 10, x: 0, y: 5)
+                            .frame(width: 60, height: 60)
+                        
+                        Image(systemName: "plus")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                }
+                .offset(y: -30)
+                
+                Spacer()
+                
+                CustomTabItem(imageName: "chart.pie.fill", title: "통계", isSelected: selectedTab == 1)
+                    .onTapGesture { selectedTab = 1 }
+            }
+            .padding(.horizontal, 30)
+        }
+    }
+}
+
+// ContentView 수정
 struct ContentView: View {
     @State private var subscriptions: [Subscription] = []
+    @State private var selectedTab = 0
+    @State private var showingAddSubscription = false
 
     var body: some View {
-        NavigationView {
-            TabView {
-                SubscriptionListView(subscriptions: $subscriptions)
-                    .tabItem {
-                        Image(systemName: "list.bullet")
-                        Text("구독 목록")
-                    }
+        ZStack(alignment: .bottom) {
+            TabView(selection: $selectedTab) {
+                NavigationView {
+                    SubscriptionListView(subscriptions: $subscriptions)
+                }
+                .tabItem { EmptyView() }
+                .tag(0)
                 
-                SubscriptionStatsView(subscriptions: subscriptions)
-                    .tabItem {
-                        Image(systemName: "chart.bar.fill")
-                        Text("통계")
-                    }
+                NavigationView {
+                    SubscriptionStatsView(subscriptions: subscriptions)
+                }
+                .tabItem { EmptyView() }
+                .tag(1)
             }
             .accentColor(AppColor.primary)
+            
+            CustomTabBar(selectedTab: $selectedTab) {
+                showingAddSubscription = true
+            }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .edgesIgnoringSafeArea(.bottom)
+        .sheet(isPresented: $showingAddSubscription) {
+            NavigationView {
+                AddSubscriptionView(subscriptions: $subscriptions)
+            }
+        }
     }
 }
 
