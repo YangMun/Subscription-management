@@ -1,7 +1,6 @@
 import SwiftUI
 import CoreData
 
-
 // 3. 구독 수정 화면 (CoreData 적용)
 struct EditSubscriptionView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -97,13 +96,21 @@ struct EditSubscriptionView: View {
     }
 
     private func deleteSubscription() {
+        // Attempt to delete the subscription from the context
         viewContext.delete(subscription)
+        
         do {
+            // Attempt to save the context to persist the deletion
             try viewContext.save()
+            print("Subscription deleted successfully: \(subscription.wrappedName)")
+            
+            // Dismiss the view after successful deletion
             presentationMode.wrappedValue.dismiss()
         } catch {
+            // Print error details if saving fails
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            print("Failed to delete the subscription: \(nsError), \(nsError.userInfo)")
         }
     }
+
 }
