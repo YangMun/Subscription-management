@@ -13,7 +13,9 @@
   - CoreData 정의
     - Preview의 SampleData 입력
   - 새 구독 작성 시 CoreData에 저장하는 기능
-    - 정상적으로 입력 됐는지 확인하는 코드 작성
+    - 정상적으로 입력 됐는지 확인하는 코드 추가
+  - 해당 구독 삭제 시 CoreData에 저장하는 기능
+    - 정상적으로 삭제 됐는지 확인하는 코드 추가
  
 ## To-Do List
 - [x] CoreData 정의
