@@ -11,6 +11,14 @@
 		81B2937E2C8559B900FFB6F9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2937D2C8559B900FFB6F9 /* ContentView.swift */; };
 		81B293802C8559BA00FFB6F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81B2937F2C8559BA00FFB6F9 /* Assets.xcassets */; };
 		81B293832C8559BA00FFB6F9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81B293822C8559BA00FFB6F9 /* Preview Assets.xcassets */; };
+		81B2939E2C85A57000FFB6F9 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81B2939C2C85A57000FFB6F9 /* Model.xcdatamodeld */; };
+		81B293AA2C868BB100FFB6F9 /* SubscriptionModel+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293A82C868BB100FFB6F9 /* SubscriptionModel+CoreDataClass.swift */; };
+		81B293AB2C868BB100FFB6F9 /* SubscriptionModel+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293A92C868BB100FFB6F9 /* SubscriptionModel+CoreDataProperties.swift */; };
+		81B293AD2C868CE100FFB6F9 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293AC2C868CE100FFB6F9 /* PersistenceController.swift */; };
+		81B293AF2C868DD600FFB6F9 /* AddSubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293AE2C868DD600FFB6F9 /* AddSubscriptionView.swift */; };
+		81B293B12C868E0B00FFB6F9 /* SubscriptionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293B02C868E0B00FFB6F9 /* SubscriptionListView.swift */; };
+		81B293B32C868E7800FFB6F9 /* EditSubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293B22C868E7800FFB6F9 /* EditSubscriptionView.swift */; };
+		81B293B52C868EDE00FFB6F9 /* SubscriptionStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293B42C868EDE00FFB6F9 /* SubscriptionStatsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +27,14 @@
 		81B2937D2C8559B900FFB6F9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		81B2937F2C8559BA00FFB6F9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81B293822C8559BA00FFB6F9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		81B2939D2C85A57000FFB6F9 /* SubscriptionModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SubscriptionModel.xcdatamodel; sourceTree = "<group>"; };
+		81B293A82C868BB100FFB6F9 /* SubscriptionModel+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionModel+CoreDataClass.swift"; sourceTree = "<group>"; };
+		81B293A92C868BB100FFB6F9 /* SubscriptionModel+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionModel+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		81B293AC2C868CE100FFB6F9 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		81B293AE2C868DD600FFB6F9 /* AddSubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSubscriptionView.swift; sourceTree = "<group>"; };
+		81B293B02C868E0B00FFB6F9 /* SubscriptionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionListView.swift; sourceTree = "<group>"; };
+		81B293B22C868E7800FFB6F9 /* EditSubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSubscriptionView.swift; sourceTree = "<group>"; };
+		81B293B42C868EDE00FFB6F9 /* SubscriptionStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStatsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,10 +67,15 @@
 		81B2937A2C8559B900FFB6F9 /* Subscribe */ = {
 			isa = PBXGroup;
 			children = (
+				81B293A32C85A95400FFB6F9 /* Model */,
 				81B2937B2C8559B900FFB6F9 /* SubscribeApp.swift */,
 				81B2937D2C8559B900FFB6F9 /* ContentView.swift */,
 				81B2937F2C8559BA00FFB6F9 /* Assets.xcassets */,
 				81B293812C8559BA00FFB6F9 /* Preview Content */,
+				81B293AE2C868DD600FFB6F9 /* AddSubscriptionView.swift */,
+				81B293B02C868E0B00FFB6F9 /* SubscriptionListView.swift */,
+				81B293B22C868E7800FFB6F9 /* EditSubscriptionView.swift */,
+				81B293B42C868EDE00FFB6F9 /* SubscriptionStatsView.swift */,
 			);
 			path = Subscribe;
 			sourceTree = "<group>";
@@ -65,6 +86,17 @@
 				81B293822C8559BA00FFB6F9 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		81B293A32C85A95400FFB6F9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				81B293A82C868BB100FFB6F9 /* SubscriptionModel+CoreDataClass.swift */,
+				81B293A92C868BB100FFB6F9 /* SubscriptionModel+CoreDataProperties.swift */,
+				81B2939C2C85A57000FFB6F9 /* Model.xcdatamodeld */,
+				81B293AC2C868CE100FFB6F9 /* PersistenceController.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +169,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81B293AA2C868BB100FFB6F9 /* SubscriptionModel+CoreDataClass.swift in Sources */,
+				81B293B32C868E7800FFB6F9 /* EditSubscriptionView.swift in Sources */,
+				81B293B12C868E0B00FFB6F9 /* SubscriptionListView.swift in Sources */,
+				81B293AB2C868BB100FFB6F9 /* SubscriptionModel+CoreDataProperties.swift in Sources */,
+				81B293AF2C868DD600FFB6F9 /* AddSubscriptionView.swift in Sources */,
+				81B293B52C868EDE00FFB6F9 /* SubscriptionStatsView.swift in Sources */,
 				81B2937E2C8559B900FFB6F9 /* ContentView.swift in Sources */,
+				81B293AD2C868CE100FFB6F9 /* PersistenceController.swift in Sources */,
 				81B2937C2C8559B900FFB6F9 /* SubscribeApp.swift in Sources */,
+				81B2939E2C85A57000FFB6F9 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +384,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		81B2939C2C85A57000FFB6F9 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				81B2939D2C85A57000FFB6F9 /* SubscriptionModel.xcdatamodel */,
+			);
+			currentVersion = 81B2939D2C85A57000FFB6F9 /* SubscriptionModel.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 81B293702C8559B900FFB6F9 /* Project object */;
 }

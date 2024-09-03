@@ -1,17 +1,14 @@
-//
-//  SubscribeApp.swift
-//  Subscribe
-//
-//  Created by 양문경 on 9/2/24.
-//
-
 import SwiftUI
+import CoreData
 
 @main
 struct SubscribeApp: App {
+    let persistenceController = PersistenceController.shared
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
