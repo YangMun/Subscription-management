@@ -7,6 +7,7 @@ struct EditSubscriptionView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var subscription: SubscriptionModel
     @State private var showingDeleteAlert = false
+    @Binding var refreshID: UUID
 
     let cycles = ["월별", "분기별", "연별"]
 
@@ -85,31 +86,41 @@ struct EditSubscriptionView: View {
         }
     }
 
+    // 변경 사항을 저장하는 함수
     private func saveChanges() {
+        // 변경된 정보를 CoreData에 저장
         do {
             try viewContext.save()
+            print("변경 사항이 저장되었습니다: \(subscription.wrappedName), 가격: \(subscription.price), 결제 주기: \(subscription.wrappedCycle), 결제 날짜: \(subscription.date ?? Date()), 링크: \(subscription.wrappedLink), 카테고리: \(subscription.wrappedCategory), 색상: \(subscription.wrappedColor)")
+            
+            refreshID = UUID()
+            
             presentationMode.wrappedValue.dismiss()
+            
         } catch {
+            // 에러 발생 시 로그 출력
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            print("변경 사항 저장 실패: \(nsError), \(nsError.userInfo)")
         }
     }
 
+    // 구독을 삭제하는 함수
     private func deleteSubscription() {
-        // Attempt to delete the subscription from the context
+        // CoreData에서 해당 구독 삭제 시도
         viewContext.delete(subscription)
         
         do {
-            // Attempt to save the context to persist the deletion
+            // 삭제 후 컨텍스트 저장
             try viewContext.save()
-            print("Subscription deleted successfully: \(subscription.wrappedName)")
+            print("구독이 성공적으로 삭제되었습니다: \(subscription.wrappedName)")
+            refreshID = UUID()
             
-            // Dismiss the view after successful deletion
+            // 삭제 후 뷰 종료
             presentationMode.wrappedValue.dismiss()
         } catch {
-            // Print error details if saving fails
+            // 저장 실패 시 로그 출력
             let nsError = error as NSError
-            print("Failed to delete the subscription: \(nsError), \(nsError.userInfo)")
+            print("구독 삭제 실패: \(nsError), \(nsError.userInfo)")
         }
     }
 

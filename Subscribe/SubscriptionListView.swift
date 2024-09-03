@@ -9,7 +9,8 @@ struct SubscriptionListView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \SubscriptionModel.name, ascending: true)],
         animation: .default)
     private var subscriptions: FetchedResults<SubscriptionModel>
-
+    @State private var refreshID = UUID()
+    
     var body: some View {
         ZStack {
             AppColor.background.edgesIgnoringSafeArea(.all)
@@ -17,7 +18,7 @@ struct SubscriptionListView: View {
             ScrollView {
                 LazyVStack(spacing: 20) {
                     ForEach(subscriptions) { subscription in
-                        NavigationLink(destination: EditSubscriptionView(subscription: subscription)) {
+                        NavigationLink(destination: EditSubscriptionView(subscription: subscription, refreshID: $refreshID)) {
                             SubscriptionCard(subscription: subscription)
                         }
                     }
@@ -25,6 +26,7 @@ struct SubscriptionListView: View {
                 }
                 .padding()
             }
+            .id(refreshID)
         }
     }
 
