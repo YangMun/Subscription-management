@@ -5,6 +5,7 @@
 - **주요 작업**:
   - 구독 목록 UI, 구독 추가 UI, 통계 UI
   - 각 UI에 대한 기능 구현
+  - 하단 TabView 디자인 변경
  
 ## To-Do List
 - [ ] CoreData 정의
