@@ -1,9 +1,11 @@
 import SwiftUI
+import AuthenticationServices
 
 struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
+    @State private var isLoggedIn: Bool = false
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -17,7 +19,7 @@ struct LoginView: View {
                     loginButton
                     forgotPasswordLink
                     divider
-                    socialLoginButtons
+                    appleSignInButton
                     signUpLink
                 }
                 .padding(.horizontal, 30)
@@ -93,10 +95,16 @@ struct LoginView: View {
         }
     }
     
+    var appleSignInButton: some View {
+        AppleSignInButton()
+    }
+    
     var socialLoginButtons: some View {
-        HStack(spacing: 20) {
-            SocialLoginButton(image: "apple.logo", color: colorScheme == .dark ? .white : .white)
-            SocialLoginButton(image: "g.circle.fill", color: colorScheme == .dark ? .white : .white)
+        VStack(spacing: 20) {
+            AppleSignInButton()
+            SocialLoginButton(image: "g.circle.fill", color: colorScheme == .dark ? .white : .white) {
+                // Google sign in action
+            }
         }
     }
     
@@ -111,6 +119,18 @@ struct LoginView: View {
             .foregroundColor(colorScheme == .dark ? Color(hex: "8E2DE2") : .white)
         }
         .font(.footnote)
+    }
+    
+    func handleAppleSignInCompletion(_ result: Result<ASAuthorization, Error>) {
+        switch result {
+        case .success(let authResults):
+            print("Apple sign in successful")
+            // Here you would typically send the authorization to your backend
+            // For this example, we'll just set isLoggedIn to true
+            self.isLoggedIn = true
+        case .failure(let error):
+            print("Apple sign in failed: \(error.localizedDescription)")
+        }
     }
 }
 

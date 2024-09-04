@@ -183,6 +183,7 @@ struct MainPage: View {
             }
         }
         .edgesIgnoringSafeArea(.bottom)
+        .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showingAddSubscription) {
             NavigationView {
                 AddSubscriptionView()

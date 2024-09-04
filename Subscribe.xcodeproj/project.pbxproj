@@ -25,11 +25,29 @@
 		81B293B52C868EDE00FFB6F9 /* SubscriptionStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B293B42C868EDE00FFB6F9 /* SubscriptionStatsView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		81ACF08D2C8827AE000A2435 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		81ACF06E2C87F563000A2435 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		81ACF0712C87FE02000A2435 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		81ACF0732C87FE1C000A2435 /* SocialLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLoginButton.swift; sourceTree = "<group>"; };
 		81ACF0752C87FE32000A2435 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		81ACF07E2C8827AD000A2435 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		81ACF0812C8827AD000A2435 /* AccountAuthenticationModificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAuthenticationModificationViewController.swift; sourceTree = "<group>"; };
+		81ACF0842C8827AD000A2435 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		81ACF0862C8827AD000A2435 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81ACF08E2C8827FF000A2435 /* Subscribe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Subscribe.entitlements; sourceTree = "<group>"; };
 		81B293782C8559B900FFB6F9 /* Subscribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Subscribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81B2937B2C8559B900FFB6F9 /* SubscribeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeApp.swift; sourceTree = "<group>"; };
 		81B2937D2C8559B900FFB6F9 /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
@@ -86,10 +104,30 @@
 			path = component;
 			sourceTree = "<group>";
 		};
+		81ACF07D2C8827AD000A2435 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				81ACF07E2C8827AD000A2435 /* AuthenticationServices.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		81ACF0802C8827AD000A2435 /* AppleLogin */ = {
+			isa = PBXGroup;
+			children = (
+				81ACF0812C8827AD000A2435 /* AccountAuthenticationModificationViewController.swift */,
+				81ACF0832C8827AD000A2435 /* MainInterface.storyboard */,
+				81ACF0862C8827AD000A2435 /* Info.plist */,
+			);
+			path = AppleLogin;
+			sourceTree = "<group>";
+		};
 		81B2936F2C8559B900FFB6F9 = {
 			isa = PBXGroup;
 			children = (
 				81B2937A2C8559B900FFB6F9 /* Subscribe */,
+				81ACF0802C8827AD000A2435 /* AppleLogin */,
+				81ACF07D2C8827AD000A2435 /* Frameworks */,
 				81B293792C8559B900FFB6F9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -105,6 +143,7 @@
 		81B2937A2C8559B900FFB6F9 /* Subscribe */ = {
 			isa = PBXGroup;
 			children = (
+				81ACF08E2C8827FF000A2435 /* Subscribe.entitlements */,
 				81B2937B2C8559B900FFB6F9 /* SubscribeApp.swift */,
 				81B2937D2C8559B900FFB6F9 /* MainPage.swift */,
 				81ACF06D2C87F53B000A2435 /* LoginPage */,
@@ -145,6 +184,7 @@
 				81B293742C8559B900FFB6F9 /* Sources */,
 				81B293752C8559B900FFB6F9 /* Frameworks */,
 				81B293762C8559B900FFB6F9 /* Resources */,
+				81ACF08D2C8827AE000A2435 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -223,6 +263,17 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		81ACF0832C8827AD000A2435 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81ACF0842C8827AD000A2435 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		81B293842C8559BA00FFB6F9 /* Debug */ = {
@@ -347,8 +398,10 @@
 		81B293872C8559BA00FFB6F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Subscribe/Subscribe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Subscribe/Preview Content\"";
@@ -380,8 +433,10 @@
 		81B293882C8559BA00FFB6F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Subscribe/Subscribe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Subscribe/Preview Content\"";
