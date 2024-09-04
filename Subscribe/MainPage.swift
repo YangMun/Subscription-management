@@ -154,7 +154,7 @@ struct CustomTabBar: View {
 }
 
 // ContentView 수정 (CoreData 적용)
-struct ContentView: View {
+struct MainPage: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var selectedTab = 0
     @State private var showingAddSubscription = false
@@ -192,10 +192,10 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MainPage_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.preview.container.viewContext
-        return ContentView()
+        return MainPage()
             .environment(\.managedObjectContext, context)
     }
 }

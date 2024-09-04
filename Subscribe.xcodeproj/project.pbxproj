@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81ACF06F2C87F563000A2435 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ACF06E2C87F563000A2435 /* LoginView.swift */; };
+		81ACF0722C87FE02000A2435 /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ACF0712C87FE02000A2435 /* CustomViews.swift */; };
+		81ACF0742C87FE1C000A2435 /* SocialLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ACF0732C87FE1C000A2435 /* SocialLoginButton.swift */; };
+		81ACF0762C87FE32000A2435 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ACF0752C87FE32000A2435 /* ColorExtension.swift */; };
 		81B2937C2C8559B900FFB6F9 /* SubscribeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2937B2C8559B900FFB6F9 /* SubscribeApp.swift */; };
-		81B2937E2C8559B900FFB6F9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2937D2C8559B900FFB6F9 /* ContentView.swift */; };
+		81B2937E2C8559B900FFB6F9 /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B2937D2C8559B900FFB6F9 /* MainPage.swift */; };
 		81B293802C8559BA00FFB6F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81B2937F2C8559BA00FFB6F9 /* Assets.xcassets */; };
 		81B293832C8559BA00FFB6F9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81B293822C8559BA00FFB6F9 /* Preview Assets.xcassets */; };
 		81B2939E2C85A57000FFB6F9 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81B2939C2C85A57000FFB6F9 /* Model.xcdatamodeld */; };
@@ -22,9 +26,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		81ACF06E2C87F563000A2435 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		81ACF0712C87FE02000A2435 /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
+		81ACF0732C87FE1C000A2435 /* SocialLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLoginButton.swift; sourceTree = "<group>"; };
+		81ACF0752C87FE32000A2435 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		81B293782C8559B900FFB6F9 /* Subscribe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Subscribe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81B2937B2C8559B900FFB6F9 /* SubscribeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeApp.swift; sourceTree = "<group>"; };
-		81B2937D2C8559B900FFB6F9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		81B2937D2C8559B900FFB6F9 /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
 		81B2937F2C8559BA00FFB6F9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81B293822C8559BA00FFB6F9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		81B2939D2C85A57000FFB6F9 /* SubscriptionModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SubscriptionModel.xcdatamodel; sourceTree = "<group>"; };
@@ -48,6 +56,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		81ACF06C2C87F4FC000A2435 /* SubscriptionPage */ = {
+			isa = PBXGroup;
+			children = (
+				81B293AE2C868DD600FFB6F9 /* AddSubscriptionView.swift */,
+				81B293B02C868E0B00FFB6F9 /* SubscriptionListView.swift */,
+				81B293B22C868E7800FFB6F9 /* EditSubscriptionView.swift */,
+				81B293B42C868EDE00FFB6F9 /* SubscriptionStatsView.swift */,
+			);
+			path = SubscriptionPage;
+			sourceTree = "<group>";
+		};
+		81ACF06D2C87F53B000A2435 /* LoginPage */ = {
+			isa = PBXGroup;
+			children = (
+				81ACF06E2C87F563000A2435 /* LoginView.swift */,
+				81ACF0702C87FD9C000A2435 /* component */,
+			);
+			path = LoginPage;
+			sourceTree = "<group>";
+		};
+		81ACF0702C87FD9C000A2435 /* component */ = {
+			isa = PBXGroup;
+			children = (
+				81ACF0712C87FE02000A2435 /* CustomViews.swift */,
+				81ACF0732C87FE1C000A2435 /* SocialLoginButton.swift */,
+				81ACF0752C87FE32000A2435 /* ColorExtension.swift */,
+			);
+			path = component;
+			sourceTree = "<group>";
+		};
 		81B2936F2C8559B900FFB6F9 = {
 			isa = PBXGroup;
 			children = (
@@ -67,15 +105,13 @@
 		81B2937A2C8559B900FFB6F9 /* Subscribe */ = {
 			isa = PBXGroup;
 			children = (
-				81B293A32C85A95400FFB6F9 /* Model */,
 				81B2937B2C8559B900FFB6F9 /* SubscribeApp.swift */,
-				81B2937D2C8559B900FFB6F9 /* ContentView.swift */,
+				81B2937D2C8559B900FFB6F9 /* MainPage.swift */,
+				81ACF06D2C87F53B000A2435 /* LoginPage */,
+				81ACF06C2C87F4FC000A2435 /* SubscriptionPage */,
+				81B293A32C85A95400FFB6F9 /* Model */,
 				81B2937F2C8559BA00FFB6F9 /* Assets.xcassets */,
 				81B293812C8559BA00FFB6F9 /* Preview Content */,
-				81B293AE2C868DD600FFB6F9 /* AddSubscriptionView.swift */,
-				81B293B02C868E0B00FFB6F9 /* SubscriptionListView.swift */,
-				81B293B22C868E7800FFB6F9 /* EditSubscriptionView.swift */,
-				81B293B42C868EDE00FFB6F9 /* SubscriptionStatsView.swift */,
 			);
 			path = Subscribe;
 			sourceTree = "<group>";
@@ -174,9 +210,13 @@
 				81B293B12C868E0B00FFB6F9 /* SubscriptionListView.swift in Sources */,
 				81B293AB2C868BB100FFB6F9 /* SubscriptionModel+CoreDataProperties.swift in Sources */,
 				81B293AF2C868DD600FFB6F9 /* AddSubscriptionView.swift in Sources */,
+				81ACF0762C87FE32000A2435 /* ColorExtension.swift in Sources */,
+				81ACF0742C87FE1C000A2435 /* SocialLoginButton.swift in Sources */,
 				81B293B52C868EDE00FFB6F9 /* SubscriptionStatsView.swift in Sources */,
-				81B2937E2C8559B900FFB6F9 /* ContentView.swift in Sources */,
+				81B2937E2C8559B900FFB6F9 /* MainPage.swift in Sources */,
 				81B293AD2C868CE100FFB6F9 /* PersistenceController.swift in Sources */,
+				81ACF06F2C87F563000A2435 /* LoginView.swift in Sources */,
+				81ACF0722C87FE02000A2435 /* CustomViews.swift in Sources */,
 				81B2937C2C8559B900FFB6F9 /* SubscribeApp.swift in Sources */,
 				81B2939E2C85A57000FFB6F9 /* Model.xcdatamodeld in Sources */,
 			);
