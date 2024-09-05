@@ -19,7 +19,7 @@ struct LoginView: View {
                     loginButton
                     forgotPasswordLink
                     divider
-                    appleSignInButton
+                    socialLoginButtons
                     signUpLink
                 }
                 .padding(.horizontal, 30)
@@ -93,10 +93,6 @@ struct LoginView: View {
             Text("OR").foregroundColor(colorScheme == .dark ? .gray : .white.opacity(0.8)).font(.footnote)
             VStack { Divider().background(colorScheme == .dark ? Color.gray.opacity(0.5) : Color.white.opacity(0.5)) }
         }
-    }
-    
-    var appleSignInButton: some View {
-        AppleSignInButton()
     }
     
     var socialLoginButtons: some View {

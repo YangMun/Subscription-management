@@ -1,4 +1,5 @@
 import SwiftUI
+import AuthenticationServices
 
 // 여기엔 구글 로그인 구현하기
 struct SocialLoginButton: View {
@@ -22,30 +23,38 @@ struct SocialLoginButton: View {
 // 애플 로그인
 struct AppleSignInButton: View {
     @Environment(\.colorScheme) var colorScheme
+    @State private var isShowingMainPage = false
     
     var body: some View {
-        Button(action: {
-            // 여기에 로그인 기능 대신 임시 액션을 넣을 수 있습니다.
-            
-        }) {
-            HStack {
-                Image(systemName: "apple.logo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20, height: 20)
-                Text("Continue with Apple")
-                    .font(.system(size: 16, weight: .medium))
+        SignInWithAppleButton(
+            onRequest: { request in
+                request.requestedScopes = [.fullName, .email]
+            },
+            onCompletion: { result in
+                switch result {
+                case .success(let authResults):
+                    print("Apple Sign In successful!")
+                    // 여기서 사용자 정보를 처리하고 저장할 수 있습니다.
+                    // 예: 사용자 ID, 이메일 등
+                    if let appleIDCredential = authResults.credential as? ASAuthorizationAppleIDCredential {
+                        let userIdentifier = appleIDCredential.user
+                        let fullName = appleIDCredential.fullName
+                        let email = appleIDCredential.email
+                        
+                        // 여기서 사용자 정보를 저장하거나 서버로 전송할 수 있습니다.
+                        
+                        // 로그인 성공 후 MainPage로 이동
+                        isShowingMainPage = true
+                    }
+                case .failure(let error):
+                    print("Apple Sign In failed: \(error.localizedDescription)")
+                }
             }
-            .foregroundColor(colorScheme == .dark ? .white : .black)
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(colorScheme == .dark ? Color.black : Color.white)
-            .overlay(
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(colorScheme == .dark ? Color.white : Color.black, lineWidth: 1)
-            )
-            .cornerRadius(5)
-        }
+        )
+        .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
         .frame(height: 50)
+        .fullScreenCover(isPresented: $isShowingMainPage) {
+            MainPage()
+        }
     }
 }
