@@ -28,8 +28,10 @@
  ### 4일차 (Day 4)
 - **주요 작업**:
   - Apple 로그인 기능 추가
-  - 회원가입 View 추가
-  - CoreData Login(id, password) 엔터티 추가
+  - 회원 가입
+    - UI
+    - 정규식 추가
+    - 회원 가입 완료 시 CoreData에 저장
  
 ## To-Do List
 - [x] CoreData 정의
