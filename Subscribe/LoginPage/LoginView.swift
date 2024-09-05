@@ -2,7 +2,7 @@ import SwiftUI
 import AuthenticationServices
 
 struct LoginView: View {
-    @State private var email: String = ""
+    @State private var id: String = ""
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
     @State private var isLoggedIn: Bool = false
@@ -63,7 +63,7 @@ struct LoginView: View {
     
     var loginForm: some View {
         VStack(spacing: 20) {
-            CustomText(image: "envelope", placeholder: "Email", text: $email)
+            CustomText(image: "person", placeholder: "id", text: $id)
             CustomSecureField(image: "lock", placeholder: "Password", text: $password, isVisible: $isPasswordVisible)
         }
     }

@@ -18,6 +18,7 @@ extension Login {
 
     @NSManaged public var id: String?
     @NSManaged public var password: String?
+    @NSManaged public var email: String?
 
 }
 

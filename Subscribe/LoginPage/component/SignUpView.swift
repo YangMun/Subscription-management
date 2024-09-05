@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreData
 
 struct SignUpView: View {
     @State private var email: String = ""
@@ -7,7 +8,11 @@ struct SignUpView: View {
     @State private var fullName: String = ""
     @State private var isPasswordVisible: Bool = false
     @State private var isConfirmPasswordVisible: Bool = false
+    @State private var errorMessage: String = ""
+    @State private var showError: Bool = false
+    @State private var showLoginView: Bool = false
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.managedObjectContext) private var viewContext
     @Binding var isPresented: Bool
     
     var body: some View {
@@ -18,6 +23,11 @@ struct SignUpView: View {
                 VStack(spacing: 30) {
                     logoAndTitle
                     signUpForm
+                    if showError {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .font(.footnote)
+                    }
                     signUpButton
                     loginLink
                 }
@@ -26,6 +36,9 @@ struct SignUpView: View {
             }
         }
         .edgesIgnoringSafeArea(.all)
+        .fullScreenCover(isPresented: $showLoginView) {
+            LoginView()
+        }
     }
     
     var backgroundGradient: some View {
@@ -65,7 +78,7 @@ struct SignUpView: View {
     
     var signUpButton: some View {
         Button(action: {
-            // Sign up action
+            validateAndSignUp()
         }) {
             Text("Sign Up")
                 .fontWeight(.semibold)
@@ -77,6 +90,8 @@ struct SignUpView: View {
                 .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
         }
     }
+    
+    
     
     var loginLink: some View {
         HStack {
@@ -90,6 +105,76 @@ struct SignUpView: View {
         }
         .font(.footnote)
         .padding(.top, 20)
+    }
+    
+    func validateAndSignUp() {
+        // Reset error state
+        errorMessage = ""
+        showError = false
+        
+        // CoreData에서 기존 사용자 확인
+        let fetchRequest: NSFetchRequest<Login> = Login.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@ OR email == %@", fullName, email)
+        
+        // 1. 모든 필드가 채워져 있는지 확인
+        guard !fullName.isEmpty, !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
+            errorMessage = "모든 필드를 입력해주세요."
+            showError = true
+            return
+        }
+        
+        // 2. 아이디(이메일)가 숫자, 특수문자로만 이루어지지 않았는지 확인
+        let emailPattern = "^(?=.*[a-zA-Z])[a-zA-Z0-9@.]+$"
+        guard fullName.range(of: emailPattern, options: .regularExpression) != nil else {
+            errorMessage = "이메일은 숫자와 특수문자로만 이루어질 수 없습니다."
+            showError = true
+            return
+        }
+        
+        // 3. 이메일 양식 확인
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        guard email.range(of: emailRegex, options: .regularExpression) != nil else {
+            errorMessage = "올바른 이메일 형식이 아닙니다."
+            showError = true
+            return
+        }
+        
+        // 4. 비밀번호와 비밀번호 확인이 일치하는지 확인
+        guard password == confirmPassword else {
+            errorMessage = "비밀번호가 일치하지 않습니다."
+            showError = true
+            return
+        }
+        
+        do {
+            let existingUsers = try viewContext.fetch(fetchRequest)
+            if !existingUsers.isEmpty {
+                // 이미 존재하는 사용자가 있는 경우
+                if existingUsers.first?.id == fullName {
+                    errorMessage = "이미 사용 중인 ID입니다."
+                } else {
+                    errorMessage = "이미 사용 중인 이메일 주소입니다."
+                }
+                showError = true
+                return
+            }
+            
+            // 새 사용자 생성 및 저장
+            let newUser = Login(context: viewContext)
+            newUser.id = fullName
+            newUser.email = email
+            newUser.password = password
+            
+            try viewContext.save()
+            print("회원가입 성공! CoreData에 저장되었습니다.")
+            // 회원가입 성공 후의 추가 로직을 구현하세요 (예: 로그인 화면으로 이동)
+            isPresented = false
+        } catch {
+            // 에러 처리
+            let nsError = error as NSError
+            errorMessage = "회원가입 중 오류가 발생했습니다: \(nsError.localizedDescription)"
+            showError = true
+        }
     }
 }
 
