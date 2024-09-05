@@ -2,11 +2,11 @@ import SwiftUI
 
 // 색상 정의
 struct AppColor {
-    static let primary = Color(red: 0.2, green: 0.5, blue: 0.9)
-    static let secondary = Color(red: 0.9, green: 0.3, blue: 0.5)
-    static let background = Color(red: 0.95, green: 0.95, blue: 0.97)
-    static let cardBackground = Color.white
-    static let text = Color(red: 0.2, green: 0.2, blue: 0.2)
+    static let primary = Color("PrimaryColor")
+    static let secondary = Color("SecondaryColor")
+    static let background = Color("BackgroundColor")
+    static let cardBackground = Color("CardBackgroundColor")
+    static let text = Color("TextColor")
     static let deleteRed = Color.red
 }
 
@@ -27,17 +27,23 @@ struct CustomTextField: View {
     var icon: String
     var placeholder: String
     @Binding var text: String
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         HStack {
             Image(systemName: icon)
                 .foregroundColor(AppColor.primary)
             TextField(placeholder, text: $text)
+                .foregroundColor(AppColor.text)
         }
         .padding()
         .background(AppColor.cardBackground)
         .cornerRadius(15)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+        .shadow(color: colorScheme == .dark ? Color.clear : Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+        .overlay(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(colorScheme == .dark ? AppColor.text.opacity(0.1) : Color.clear, lineWidth: 1)
+        )
     }
 }
 
@@ -48,12 +54,12 @@ extension UIColor {
     }
 }
 
-
 // 커스텀 버튼
 struct CustomButton: View {
     var title: String
     var action: () -> Void
     var color: Color = AppColor.primary
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         Button(action: action) {
@@ -62,9 +68,9 @@ struct CustomButton: View {
                 .padding()
                 .frame(maxWidth: .infinity)
                 .background(color)
-                .foregroundColor(.white)
+                .foregroundColor(AppColor.cardBackground)
                 .cornerRadius(15)
-                .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
+                .shadow(color: colorScheme == .dark ? Color.clear : Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
         }
     }
 }
@@ -72,6 +78,8 @@ struct CustomButton: View {
 struct StatCard: View {
     var title: String
     var value: String
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack(spacing: 10) {
             Text(title)
@@ -87,7 +95,11 @@ struct StatCard: View {
         .padding()
         .background(AppColor.cardBackground)
         .cornerRadius(15)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+        .shadow(color: colorScheme == .dark ? Color.clear : Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+        .overlay(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(colorScheme == .dark ? AppColor.text.opacity(0.1) : Color.clear, lineWidth: 1)
+        )
     }
 }
 
@@ -100,11 +112,11 @@ struct CustomTabItem: View {
         VStack(spacing: 4) {
             Image(systemName: imageName)
                 .font(.system(size: 24))
-                .foregroundColor(isSelected ? AppColor.primary : .gray)
+                .foregroundColor(isSelected ? AppColor.primary : AppColor.text.opacity(0.5))
             Text(title)
                 .font(.caption2)
                 .fontWeight(isSelected ? .bold : .regular)
-                .foregroundColor(isSelected ? AppColor.primary : .gray)
+                .foregroundColor(isSelected ? AppColor.primary : AppColor.text.opacity(0.5))
         }
         .frame(maxWidth: .infinity)
     }
@@ -113,13 +125,18 @@ struct CustomTabItem: View {
 struct CustomTabBar: View {
     @Binding var selectedTab: Int
     let addAction: () -> Void
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
             // 메인 탭바 배경
             RoundedRectangle(cornerRadius: 30)
                 .fill(AppColor.cardBackground)
-                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
+                .shadow(color: colorScheme == .dark ? Color.clear : Color.black.opacity(0.1), radius: 10, x: 0, y: -5)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30)
+                        .stroke(colorScheme == .dark ? AppColor.text.opacity(0.1) : Color.clear, lineWidth: 1)
+                )
                 .frame(height: 70)
             
             HStack(spacing: 0) {
@@ -138,7 +155,7 @@ struct CustomTabBar: View {
                         
                         Image(systemName: "plus")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(AppColor.cardBackground)
                     }
                 }
                 .offset(y: -30)
@@ -158,6 +175,7 @@ struct MainPage: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var selectedTab = 0
     @State private var showingAddSubscription = false
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -190,13 +208,21 @@ struct MainPage: View {
                     .environment(\.managedObjectContext, viewContext)
             }
         }
+        .background(AppColor.background.edgesIgnoringSafeArea(.all))
     }
 }
 
 struct MainPage_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.preview.container.viewContext
-        return MainPage()
-            .environment(\.managedObjectContext, context)
+        Group {
+            MainPage()
+                .environment(\.managedObjectContext, context)
+                .preferredColorScheme(.light)
+            
+            MainPage()
+                .environment(\.managedObjectContext, context)
+                .preferredColorScheme(.dark)
+        }
     }
 }
