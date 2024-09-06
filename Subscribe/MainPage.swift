@@ -8,6 +8,7 @@ struct AppColor {
     static let cardBackground = Color("CardBackgroundColor")
     static let text = Color("TextColor")
     static let deleteRed = Color.red
+    static let subtext = Color("SubtextColor") // 부가 텍스트 색상
 }
 
 // 구독 모델

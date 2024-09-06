@@ -6,75 +6,120 @@ import CoreData
 struct SubscriptionService: Identifiable {
     let id = UUID()
     let name: String
-    let icon: String // SF Symbols 이름
+    let imageName: String // SF Symbols 이름
 }
 
 // 구독 서비스 목록
 let subscriptionServices: [SubscriptionService] = [
-    SubscriptionService(name: "Netflix", icon: "play.tv"),
-    SubscriptionService(name: "Spotify", icon: "music.note"),
-    SubscriptionService(name: "Apple Music", icon: "applelogo"),
-    SubscriptionService(name: "Disney+", icon: "film"),
-    SubscriptionService(name: "YouTube Premium", icon: "play.rectangle"),
+    SubscriptionService(name: "Netflix", imageName: "Netflix"),
+    SubscriptionService(name: "Spotify", imageName: "Spotify"),
+    SubscriptionService(name: "Apple Music", imageName: "AppleWhite"),
+    SubscriptionService(name: "Disney+", imageName: "Disney"),
+    SubscriptionService(name: "YouTube Premium", imageName: "youtube"),
+    SubscriptionService(name: "Naver", imageName: "naver"),
     // 필요에 따라 더 많은 서비스를 추가할 수 있습니다.
 ]
+
+struct SubscriptionServiceView: View {
+    let service: SubscriptionService
+    
+    var body: some View {
+        VStack {
+            Image(service.imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
+            Text(service.name)
+                .font(.caption)
+        }
+    }
+}
 
 // 구독 서비스 선택 뷰
 struct SubscriptionSelectionView: View {
     @Binding var selectedService: String
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.colorScheme) var colorScheme
+    @State private var searchText = ""
+
+    var filteredServices: [SubscriptionService] {
+        if searchText.isEmpty {
+            return subscriptionServices
+        } else {
+            return subscriptionServices.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
 
     var body: some View {
         NavigationView {
             ZStack {
-                backgroundColor.edgesIgnoringSafeArea(.all)
+                AppColor.background.edgesIgnoringSafeArea(.all)
                 
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
-                        ForEach(subscriptionServices) { service in
-                            Button(action: {
-                                selectedService = service.name
-                                presentationMode.wrappedValue.dismiss()
-                            }) {
-                                VStack {
-                                    Image(systemName: service.icon)
-                                        .font(.system(size: 30))
-                                        .foregroundColor(.white)
-                                        .frame(width: 60, height: 60)
-                                        .background(Color.purple)
-                                        .clipShape(RoundedRectangle(cornerRadius: 15))
-                                    
-                                    Text(service.name)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(textColor)
-                                }
+                VStack(spacing: 0) {
+                    searchBar
+                    
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                            ForEach(filteredServices) { service in
+                                serviceButton(for: service)
                             }
-                            .padding()
-                            .background(cardBackgroundColor)
-                            .cornerRadius(20)
                         }
+                        .padding()
                     }
-                    .padding()
                 }
             }
             .navigationBarTitle("구독 서비스 선택", displayMode: .inline)
-            .navigationBarItems(trailing: Button("취소") {
-                presentationMode.wrappedValue.dismiss()
-            })
+            .navigationBarItems(trailing: cancelButton)
         }
     }
     
-    var backgroundColor: Color {
-        colorScheme == .dark ? Color.black : Color.white
+    var searchBar: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(AppColor.subtext)
+            TextField("서비스 검색", text: $searchText)
+                .foregroundColor(AppColor.text)
+        }
+        .padding()
+        .background(AppColor.cardBackground)
+        .cornerRadius(15)
+        .padding()
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
     
-    var cardBackgroundColor: Color {
-        colorScheme == .dark ? Color(white: 0.2) : Color(white: 0.95)
+    func serviceButton(for service: SubscriptionService) -> some View {
+        Button(action: {
+            selectedService = service.name
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            VStack {
+                Image(service.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .padding(10)
+                    .background(AppColor.cardBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                
+                Text(service.name)
+                    .font(.caption)
+                    .foregroundColor(AppColor.text)
+                    .lineLimit(1)
+            }
+            .frame(height: 120)
+            .padding()
+            .background(AppColor.cardBackground)
+            .cornerRadius(15)
+            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        }
     }
     
-    var textColor: Color {
-        colorScheme == .dark ? Color.white : Color.black
+    var cancelButton: some View {
+        Button("취소") {
+            presentationMode.wrappedValue.dismiss()
+        }
+        .foregroundColor(AppColor.primary)
     }
 }
 
@@ -232,6 +277,20 @@ struct AddSubscriptionView: View {
         } catch {
             alertMessage = "저장된 데이터를 확인하는 동안 오류가 발생했습니다."
             showAlert = true
+        }
+    }
+}
+
+
+// Preview
+struct SubscriptionSelectionView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            SubscriptionSelectionView(selectedService: .constant(""))
+                .preferredColorScheme(.light)
+            
+            SubscriptionSelectionView(selectedService: .constant(""))
+                .preferredColorScheme(.dark)
         }
     }
 }
