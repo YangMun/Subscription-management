@@ -1,9 +1,88 @@
 import SwiftUI
 import CoreData
 
+
+// 구독 서비스 모델
+struct SubscriptionService: Identifiable {
+    let id = UUID()
+    let name: String
+    let icon: String // SF Symbols 이름
+}
+
+// 구독 서비스 목록
+let subscriptionServices: [SubscriptionService] = [
+    SubscriptionService(name: "Netflix", icon: "play.tv"),
+    SubscriptionService(name: "Spotify", icon: "music.note"),
+    SubscriptionService(name: "Apple Music", icon: "applelogo"),
+    SubscriptionService(name: "Disney+", icon: "film"),
+    SubscriptionService(name: "YouTube Premium", icon: "play.rectangle"),
+    // 필요에 따라 더 많은 서비스를 추가할 수 있습니다.
+]
+
+// 구독 서비스 선택 뷰
+struct SubscriptionSelectionView: View {
+    @Binding var selectedService: String
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme
+
+    var body: some View {
+        NavigationView {
+            ZStack {
+                backgroundColor.edgesIgnoringSafeArea(.all)
+                
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                        ForEach(subscriptionServices) { service in
+                            Button(action: {
+                                selectedService = service.name
+                                presentationMode.wrappedValue.dismiss()
+                            }) {
+                                VStack {
+                                    Image(systemName: service.icon)
+                                        .font(.system(size: 30))
+                                        .foregroundColor(.white)
+                                        .frame(width: 60, height: 60)
+                                        .background(Color.purple)
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                                    
+                                    Text(service.name)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .foregroundColor(textColor)
+                                }
+                            }
+                            .padding()
+                            .background(cardBackgroundColor)
+                            .cornerRadius(20)
+                        }
+                    }
+                    .padding()
+                }
+            }
+            .navigationBarTitle("구독 서비스 선택", displayMode: .inline)
+            .navigationBarItems(trailing: Button("취소") {
+                presentationMode.wrappedValue.dismiss()
+            })
+        }
+    }
+    
+    var backgroundColor: Color {
+        colorScheme == .dark ? Color.black : Color.white
+    }
+    
+    var cardBackgroundColor: Color {
+        colorScheme == .dark ? Color(white: 0.2) : Color(white: 0.95)
+    }
+    
+    var textColor: Color {
+        colorScheme == .dark ? Color.white : Color.black
+    }
+}
+
+
 struct AddSubscriptionView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme
 
     @State private var name = ""
     @State private var price = ""
@@ -12,6 +91,7 @@ struct AddSubscriptionView: View {
     @State private var link = ""
     @State private var category = "Independent"
     @State private var color = Color.blue
+    @State private var showingSubscriptionPicker = false
 
     @State private var showAlert = false
     @State private var alertMessage = ""
@@ -29,7 +109,24 @@ struct AddSubscriptionView: View {
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(AppColor.text)
-                        CustomTextField(icon: "pencil", placeholder: "구독 이름", text: $name)
+                        
+                        Button(action: {
+                            showingSubscriptionPicker = true
+                        }) {
+                            HStack {
+                                Image(systemName: "pencil")
+                                Text(name.isEmpty ? "구독 서비스 선택" : name)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                            }
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(10)
+                        }
+                        .sheet(isPresented: $showingSubscriptionPicker) {
+                            SubscriptionSelectionView(selectedService: $name)
+                        }
+                        
                         CustomTextField(icon: "dollarsign.circle", placeholder: "가격", text: $price)
                             .keyboardType(.numberPad)
                     }
