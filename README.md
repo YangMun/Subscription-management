@@ -36,6 +36,8 @@
   - 입력 받은 id, password가 CoreData에 일치한지 확인하는 기능
   - 로그인 버튼을 통해 MainPage 화면 전환
     - 화면 전환 시 키보드 UI가 같이 전환되는 현상 해결
+  - 전체 UI 색상 수정
+    - Assets에 색상 정의
  
 ## To-Do List
 - [x] CoreData 정의
