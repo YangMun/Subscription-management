@@ -115,13 +115,21 @@ struct AddSubscriptionView: View {
                         }) {
                             HStack {
                                 Image(systemName: "pencil")
+                                    .foregroundColor(AppColor.primary)
                                 Text(name.isEmpty ? "구독 서비스 선택" : name)
+                                    .foregroundColor(AppColor.text)
                                 Spacer()
                                 Image(systemName: "chevron.right")
+                                    .foregroundColor(AppColor.text)
                             }
                             .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(10)
+                            .background(AppColor.cardBackground)
+                            .cornerRadius(15)
+                            .shadow(color: colorScheme == .dark ? Color.clear : Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(colorScheme == .dark ? AppColor.text.opacity(0.1) : Color.clear, lineWidth: 1)
+                            )
                         }
                         .sheet(isPresented: $showingSubscriptionPicker) {
                             SubscriptionSelectionView(selectedService: $name)
