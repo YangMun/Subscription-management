@@ -38,6 +38,11 @@
     - 화면 전환 시 키보드 UI가 같이 전환되는 현상 해결
   - 전체 UI 색상 수정
     - Assets에 색상 정의
+   
+ ### 5일차 (Day 5)
+- **주요 작업**:
+  - SubscriptionSelectionView 추가
+    - 직접 입력하지 않고 구독 서비스 선택
  
 ## To-Do List
 - [x] CoreData 정의
