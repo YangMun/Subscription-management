@@ -44,6 +44,7 @@
   - SubscriptionSelectionView 추가
     - 직접 입력하지 않고 구독 서비스 선택
     - "구독 서비스 선택" 버튼 UI 수정
+      - Icon으로 변경 
  
 ## To-Do List
 - [x] CoreData 정의
