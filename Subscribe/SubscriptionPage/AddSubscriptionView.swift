@@ -286,10 +286,10 @@ struct AddSubscriptionView: View {
 struct SubscriptionSelectionView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SubscriptionSelectionView(selectedService: .constant(""))
+            AddSubscriptionView()
                 .preferredColorScheme(.light)
             
-            SubscriptionSelectionView(selectedService: .constant(""))
+            AddSubscriptionView()
                 .preferredColorScheme(.dark)
         }
     }

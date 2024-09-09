@@ -139,9 +139,9 @@ struct LoginView: View {
     var socialLoginButtons: some View {
         VStack(spacing: 20) {
             AppleSignInButton()
-            SocialLoginButton(image: "g.circle.fill", color: colorScheme == .dark ? .white : .white) {
-                // Google sign in action
-            }
+//            SocialLoginButton(image: "g.circle.fill", color: colorScheme == .dark ? .white : .white) {
+//                // Google sign in action
+//            }
         }
     }
     

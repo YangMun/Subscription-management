@@ -10,24 +10,46 @@ struct SubscriptionListView: View {
         animation: .default)
     private var subscriptions: FetchedResults<SubscriptionModel>
     @State private var refreshID = UUID()
+    @State private var selectedCategory = "전체"
+    @State private var categories: [String] = ["전체"]
     
     var body: some View {
         ZStack {
             AppColor.background.edgesIgnoringSafeArea(.all)
             
-            ScrollView {
-                LazyVStack(spacing: 20) {
-                    ForEach(subscriptions) { subscription in
-                        NavigationLink(destination: EditSubscriptionView(subscription: subscription, refreshID: $refreshID)) {
-                            SubscriptionCard(subscription: subscription)
+            VStack(spacing: 20) {
+                CategorySortView(selectedCategory: $selectedCategory, categories: categories)
+                    .padding(.horizontal)
+                
+                ScrollView {
+                    LazyVStack(spacing: 20) {
+                        ForEach(filteredSubscriptions) { subscription in
+                            NavigationLink(destination: EditSubscriptionView(subscription: subscription, refreshID: $refreshID)) {
+                                SubscriptionCard(subscription: subscription)
+                            }
                         }
+                        .onDelete(perform: deleteSubscription)
                     }
-                    .onDelete(perform: deleteSubscription)
+                    .padding()
                 }
-                .padding()
             }
             .id(refreshID)
         }
+        .onAppear(perform: loadCategories)
+    }
+
+    private var filteredSubscriptions: [SubscriptionModel] {
+        if selectedCategory == "전체" {
+            return Array(subscriptions)
+        } else {
+            return subscriptions.filter { $0.wrappedCategory == selectedCategory }
+        }
+    }
+    
+    private func loadCategories() {
+        var uniqueCategories = Set(subscriptions.map { $0.wrappedCategory })
+        uniqueCategories.insert("전체")
+        categories = Array(uniqueCategories).sorted()
     }
 
     private func deleteSubscription(at offsets: IndexSet) {
@@ -42,9 +64,61 @@ struct SubscriptionListView: View {
     }
 }
 
+// 카테고리 정렬 뷰
+struct CategorySortView: View {
+    @Binding var selectedCategory: String
+    let categories: [String]
+    @Namespace private var animation
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 15) {
+                ForEach(categories, id: \.self) { category in
+                    CategoryButton(category: category, isSelected: selectedCategory == category, namespace: animation)
+                        .onTapGesture {
+                            withAnimation(.spring()) {
+                                selectedCategory = category
+                            }
+                        }
+                }
+            }
+            .padding(.horizontal)
+        }
+        .padding(.vertical, 10)
+        .background(AppColor.cardBackground)
+        .cornerRadius(15)
+        .shadow(color: colorScheme == .dark ? Color.clear : Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+    }
+}
+
+struct CategoryButton: View {
+    let category: String
+    let isSelected: Bool
+    let namespace: Namespace.ID
+    
+    var body: some View {
+        Text(category)
+            .fontWeight(isSelected ? .bold : .regular)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 16)
+            .background(
+                ZStack {
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(AppColor.primary)
+                            .matchedGeometryEffect(id: "background", in: namespace)
+                    }
+                }
+            )
+            .foregroundColor(isSelected ? AppColor.cardBackground : AppColor.text)
+    }
+}
+
 // 구독 카드 뷰 (CoreData 적용)
 struct SubscriptionCard: View {
     let subscription: SubscriptionModel
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         HStack(spacing: 15) {
@@ -81,7 +155,7 @@ struct SubscriptionCard: View {
         .padding()
         .background(AppColor.cardBackground)
         .cornerRadius(15)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
+        .shadow(color: colorScheme == .dark ? Color.clear : Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
     }
 }
 
